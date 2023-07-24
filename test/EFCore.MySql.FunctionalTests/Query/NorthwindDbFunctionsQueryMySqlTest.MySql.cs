@@ -285,5 +285,20 @@ FROM `Customers` AS `c`
 WHERE `c`.`CustomerID` = 'VINET'
 LIMIT 1");
         }
+
+        [ConditionalFact]
+        public virtual void ConvertTz()
+        {
+            using var context = CreateContext();
+
+            var office = context.Orders
+                .Select(o => EF.Functions.ConvertTz(o.OrderDate.Value, "UTC", "America/Sao_Paulo"))
+                .First();
+
+            AssertSql(
+                @"SELECT CONVERT_TZ(`o`.`OrderDate`, 'UTC', 'America/Sao_Paulo')
+FROM `Orders` AS `o`
+LIMIT 1");
+        }
     }
 }

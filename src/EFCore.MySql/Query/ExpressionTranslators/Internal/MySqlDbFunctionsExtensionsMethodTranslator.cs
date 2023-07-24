@@ -123,6 +123,8 @@ namespace Pomelo.EntityFrameworkCore.MySql.Query.ExpressionTranslators.Internal
         private static readonly MethodInfo _radiansDoubleMethodInfo = typeof(MySqlDbFunctionsExtensions).GetRuntimeMethod(nameof(MySqlDbFunctionsExtensions.Radians), new[] { typeof(DbFunctions), typeof(double) });
         private static readonly MethodInfo _radiansFloatMethodInfo = typeof(MySqlDbFunctionsExtensions).GetRuntimeMethod(nameof(MySqlDbFunctionsExtensions.Radians), new[] { typeof(DbFunctions), typeof(float) });
 
+        private static readonly MethodInfo _convertTzMethodInfo = typeof(MySqlDbFunctionsExtensions).GetRuntimeMethod(nameof(MySqlDbFunctionsExtensions.ConvertTz), new[] { typeof(DbFunctions), typeof(DateTime), typeof(string), typeof(string) });
+
         public MySqlDbFunctionsExtensionsMethodTranslator(ISqlExpressionFactory sqlExpressionFactory)
         {
             _sqlExpressionFactory = (MySqlSqlExpressionFactory)sqlExpressionFactory;
@@ -223,6 +225,14 @@ namespace Pomelo.EntityFrameworkCore.MySql.Query.ExpressionTranslators.Internal
                 return _sqlExpressionFactory.NullableFunction(
                     "RADIANS",
                     new[] { arguments[1] },
+                    method.ReturnType);
+            }
+
+            if (Equals(method, _convertTzMethodInfo))
+            {
+                return _sqlExpressionFactory.NullableFunction(
+                    "CONVERT_TZ",
+                    new[] { arguments[1], arguments[2], arguments[3] },
                     method.ReturnType);
             }
 

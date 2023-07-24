@@ -770,5 +770,12 @@ namespace Microsoft.EntityFrameworkCore
             this DbFunctions _,
             float degrees)
             => throw new InvalidOperationException(CoreStrings.FunctionOnClient(nameof(Radians)));
+
+        public static DateTime ConvertTz(
+            [CanBeNull] this DbFunctions _,
+            [CanBeNull] DateTime dateTime,
+            [CanBeNull] string fromTz,
+            [CanBeNull] string toTz)
+            => throw new InvalidOperationException(CoreStrings.FunctionOnClient(nameof(ConvertTz)));
     }
 }
